@@ -1,6 +1,7 @@
 package com.example.demo.app
 
 import com.example.demo.app.exercisemodel.Exercise
+import com.example.demo.app.exercisemodel.ExerciseSet
 import com.example.demo.view.MainView
 import javafx.animation.AnimationTimer
 import tornadofx.App
@@ -8,11 +9,19 @@ import tornadofx.App
 class MyApp: App(MainView::class, Styles::class)
 {
     val view: MainView by inject()
+    var initialized = false
 
-    val exercises = arrayOf(
-        Exercise("Warmup", 5*60),
-        Exercise("Handstand", 5*60),
-    )
+    private var currentExercise: Exercise? = Exercise.exerciseFromList(arrayOf(
+        Exercise("Workout", 2),
+        Exercise("Handstand", 2),
+        ExerciseSet(4, arrayOf(
+            Exercise("Klimmzüge", 2),
+            Exercise("Liegestützen", 2)
+        )),
+        Exercise("Leg workout", 2)
+    ))
+
+    private var time = currentExercise?.duration ?: 0
 
     var paused: Boolean = false
         set(value)
@@ -31,12 +40,38 @@ class MyApp: App(MainView::class, Styles::class)
             if (time - lastTime < 1000)
                 return
             lastTime = time
-            view.time ++
+
+            if (!initialized)
+            {
+                initialized = true
+                view.exerciseDisplay.value = currentExercise!!.name
+            }
+
+            step()
         }
     }
 
     init {
         timer.start()
+    }
+
+    fun step()
+    {
+        time --
+        view.time = time
+
+        if (time > 0)
+            return
+        if (currentExercise == null)
+            return
+
+        val next = currentExercise!!.next?.next
+        currentExercise = currentExercise!!.next?.reduceToElement(next)
+        if (currentExercise == null)
+            return
+        time = currentExercise!!.duration
+        view.time = time
+        view.exerciseDisplay.value = currentExercise!!.name
     }
 
 }

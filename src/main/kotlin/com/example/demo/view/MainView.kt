@@ -12,7 +12,8 @@ class MainView : View("Hello TornadoFX") {
 
     private val timeMinutes = SimpleIntegerProperty(0)
     private val timeSeconds = SimpleIntegerProperty(0)
-    private val exerciseDisplay = SimpleStringProperty("something goes here")
+    val exerciseDisplay = SimpleStringProperty("something goes here")
+
     var time = 0
         set(value)
         {
