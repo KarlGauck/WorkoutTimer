@@ -4,7 +4,7 @@ class Exercise (
     val name: String,
     val duration: Int
 ): ScheduleElement() {
-    override fun reduceToElement(next: ScheduleElement?): Exercise {
+    override fun reduceToElement(): Exercise {
         return this
     }
 
@@ -14,7 +14,7 @@ class Exercise (
         {
             if (elements.isEmpty())
                 return null
-            val final = elements[0].reduceToElement(if (elements.size >= 2) elements[1] else null)!!
+            val final = elements[0].reduceToElement()!!
             var last: ScheduleElement = final
             for (element in elements.slice(1 until elements.size))
             {

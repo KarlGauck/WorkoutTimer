@@ -12,6 +12,8 @@ class Styles : Stylesheet() {
         val timeDisplay by cssclass()
         val exerciseLabel by cssclass()
         val controlButton by cssclass()
+        val selectionButton by cssclass()
+        val switchButton by cssclass()
     }
 
     init {
@@ -41,6 +43,24 @@ class Styles : Stylesheet() {
             fontSize = 30.px
             fontWeight = FontWeight.BOLD
             fontFamily = "Comic Sans MS"
+        }
+        selectionButton {
+            and(hover) {
+                backgroundColor = multi(Color.DARKGREY)
+            }
+            borderRadius = multi(box(50.px))
+            backgroundColor = multi(Color.LIGHTGRAY)
+            padding = box(5.0.px, 200.px)
+            fontSize = 40.px
+            fontWeight = FontWeight.BOLD
+        }
+        switchButton {
+            prefWidth = 50.px
+            prefHeight = 50.px
+            backgroundColor = multi(Color.TRANSPARENT)
+            padding = box(5.0.px, 200.px)
+            fontSize = 20.px
+            fontWeight = FontWeight.BOLD
         }
     }
 }

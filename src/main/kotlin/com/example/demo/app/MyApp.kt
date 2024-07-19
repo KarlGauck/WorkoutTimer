@@ -2,7 +2,11 @@ package com.example.demo.app
 
 import com.example.demo.app.exercisemodel.Exercise
 import com.example.demo.app.exercisemodel.ExerciseSet
+import com.example.demo.app.io.DataLoader
+import com.example.demo.app.sound.SoundHandler
+import com.example.demo.m
 import com.example.demo.view.MainView
+import com.google.gson.GsonBuilder
 import javafx.animation.AnimationTimer
 import tornadofx.App
 
@@ -12,18 +16,24 @@ class MyApp: App(MainView::class, Styles::class)
     var initialized = false
 
     private var currentExercise: Exercise? = Exercise.exerciseFromList(arrayOf(
-        Exercise("Workout", 2),
-        Exercise("Handstand", 2),
-        ExerciseSet(4, arrayOf(
-            Exercise("Klimmzüge", 2),
-            Exercise("Liegestützen", 2)
+        Exercise("Warmup", 5.m),
+        Exercise("Handstand", 5.m),
+        ExerciseSet(2, arrayOf(
+            Exercise("Handstandliegestützen", 1.m),
+            Exercise("Klimmzüge", 1.m),
+            Exercise("Liegestützen", 1.m),
+            Exercise("L-Sit Boden", 1.m),
+            Exercise("Superman Rücken", 1.m),
+            Exercise("Superman Bauch", 1.m),
+            Exercise("Bauch Seite", 1.m),
+            Exercise("Zugseil", 1.m)
         )),
-        Exercise("Leg workout", 2)
+        Exercise("Leg workout", 10.m)
     ))
 
     private var time = currentExercise?.duration ?: 0
 
-    var paused: Boolean = false
+    var paused: Boolean = true
         set(value)
         {
             field = value
@@ -51,24 +61,26 @@ class MyApp: App(MainView::class, Styles::class)
         }
     }
 
-    init {
-        timer.start()
-    }
-
     fun step()
     {
         time --
         view.time = time
+
+        if (time == 0)
+        {
+            SoundHandler.play()
+            paused = true
+        }
 
         if (time > 0)
             return
         if (currentExercise == null)
             return
 
-        val next = currentExercise!!.next?.next
-        currentExercise = currentExercise!!.next?.reduceToElement(next)
+        currentExercise = currentExercise!!.next?.reduceToElement()
         if (currentExercise == null)
             return
+
         time = currentExercise!!.duration
         view.time = time
         view.exerciseDisplay.value = currentExercise!!.name

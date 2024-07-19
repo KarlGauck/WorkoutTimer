@@ -2,10 +2,13 @@ package com.example.demo.view
 
 import com.example.demo.app.MyApp
 import com.example.demo.app.Styles
+import com.example.demo.app.io.DataLoader
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.Priority
+import javafx.scene.text.TextAlignment
 import tornadofx.*
 
 class MainView : View("Hello TornadoFX") {
@@ -27,8 +30,20 @@ class MainView : View("Hello TornadoFX") {
 
         alignment = Pos.CENTER
         paddingAll = 5.0
+
+        addEventFilter(KeyEvent.KEY_PRESSED) {
+            println("test")
+            println(it.character)
+            println(it.text)
+            println(it.code)
+            if (it.text != " ")
+                return@addEventFilter
+            myApp.paused = !myApp.paused
+        }
+
         label("YOU CAN DO IT!!!") {
             addClass(Styles.exerciseLabel)
+            hgrow = Priority.ALWAYS
         }
         label(exerciseDisplay) {
             addClass(Styles.heading)
@@ -36,7 +51,7 @@ class MainView : View("Hello TornadoFX") {
             useMaxHeight = true
         }
         label {
-            fun changeText () {
+            fun changeText() {
                 text = "${"%02d".format(timeMinutes.value)} : ${"%02d".format(timeSeconds.value)}"
             }
             changeText()
@@ -59,7 +74,7 @@ class MainView : View("Hello TornadoFX") {
             button("=") {
                 addClass(Styles.controlButton)
                 setOnAction {
-                    myApp.paused = myApp.paused.not()
+                    myApp.paused = !myApp.paused
                 }
             }
             button(">") {
@@ -74,5 +89,18 @@ class MainView : View("Hello TornadoFX") {
     override fun onDock() {
         super.onDock()
         super.currentStage?.isMaximized = true
+    }
+}
+
+class DataView() : View("")
+{
+    override val root = vbox {
+        for (name in DataLoader.workoutList())
+        {
+            button(name)
+            {
+                addClass(Styles.selectionButton)
+            }
+        }
     }
 }
