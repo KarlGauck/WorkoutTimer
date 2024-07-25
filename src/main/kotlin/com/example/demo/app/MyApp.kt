@@ -13,6 +13,8 @@ class MyApp: App(MainView::class, Styles::class)
     private var initialized = false
 
     private var currentExercise: Exercise? = DataLoader.getDefaultExercise()
+    private var exerciseStart: Exercise? = DataLoader.getDefaultExercise()
+    private var exerciseCounter = 0
 
     private var time = currentExercise?.duration ?: 0
 
@@ -57,14 +59,8 @@ class MyApp: App(MainView::class, Styles::class)
         if (currentExercise == null)
             return
 
-        currentExercise = currentExercise!!.next?.reduceToElement()
-        if (currentExercise == null)
-            return
-
         SoundHandler.play()
-        time = currentExercise!!.duration
-        resetState()
-        paused = true
+        next()
     }
 
     fun loadWorkout(workout: String)
@@ -79,6 +75,53 @@ class MyApp: App(MainView::class, Styles::class)
         paused = true
         currentExercise = DataLoader.getDefaultExercise()
         resetState()
+    }
+
+    fun next()
+    {
+        if (currentExercise?.next == null)
+            return
+        currentExercise = currentExercise!!.next?.reduceToElement()
+        exerciseCounter++
+        if (currentExercise == null)
+            return
+        time = currentExercise!!.duration
+        resetState()
+        paused = true
+    }
+
+    fun backToStart()
+    {
+        currentExercise = exerciseStart
+        resetState()
+        paused = true
+    }
+
+    fun back()
+    {
+        goto(exerciseCounter-1)
+    }
+
+    fun goto(index: Int)
+    {
+        if (index == 0)
+        {
+            resetState()
+            paused = true
+            return
+        }
+
+        var iteratorExercise = exerciseStart
+        for (i in 0 until index)
+        {
+            if (iteratorExercise == null)
+                return
+            iteratorExercise = iteratorExercise.next?.reduceToElement()
+        }
+        currentExercise = iteratorExercise
+        exerciseCounter = index
+        resetState()
+        paused = true
     }
 
     private fun resetState()

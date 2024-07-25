@@ -26,7 +26,7 @@ class MainView : View("Workouttimer") {
     private val timeMinutes = SimpleIntegerProperty(0)
     private val timeSeconds = SimpleIntegerProperty(0)
     val exerciseDisplay = SimpleStringProperty("something goes here")
-    var inDataview = true
+    private var inDataview = true
     private lateinit var mainElement: VBox
     private lateinit var dataElement: Node
     private lateinit var blurRect: Node
@@ -56,9 +56,10 @@ class MainView : View("Workouttimer") {
             addEventFilter(KeyEvent.KEY_PRESSED) {
                 if (it.code == KeyCode.ESCAPE)
                     hideLoadingScreen()
-                if (it.text != " ")
-                    return@addEventFilter
-                myApp.paused = !myApp.paused
+                if (it.code == KeyCode.S)
+                    showLoadingScreen()
+                if (it.code == KeyCode.SPACE)
+                    myApp.paused = !myApp.paused
             }
 
             stackpane {
@@ -99,9 +100,15 @@ class MainView : View("Workouttimer") {
                 spacing = 15.0
                 button("<<") {
                     addClass(Styles.controlButton)
+                    action {
+                        myApp.backToStart()
+                    }
                 }
                 button("<") {
                     addClass(Styles.controlButton)
+                    action {
+                        myApp.back()
+                    }
                 }
                 button("=") {
                     addClass(Styles.controlButton)
@@ -111,9 +118,18 @@ class MainView : View("Workouttimer") {
                 }
                 button(">") {
                     addClass(Styles.controlButton)
+                    action {
+                        myApp.next()
+                    }
                 }
                 button(">>") {
                     addClass(Styles.controlButton)
+                    action {
+                        if (text == ">>")
+                            text = "Seriously, this button?"
+                        else if (text == "Seriously, this button?")
+                            text = ">>"
+                    }
                 }
             }
             effect = backgroundEffect
