@@ -1,5 +1,7 @@
 package com.example.demo.app
 
+import com.sun.java.swing.plaf.windows.WindowsBorders.DashedBorder
+import javafx.scene.effect.Shadow
 import javafx.scene.layout.BorderStrokeStyle
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
@@ -14,6 +16,8 @@ class Styles : Stylesheet() {
         val controlButton by cssclass()
         val selectionButton by cssclass()
         val switchButton by cssclass()
+        val dataView by cssclass()
+        val dataHeading by cssclass()
     }
 
     init {
@@ -46,21 +50,30 @@ class Styles : Stylesheet() {
         }
         selectionButton {
             and(hover) {
-                backgroundColor = multi(Color.DARKGREY)
+                backgroundColor = multi(Color.LIGHTGRAY)
             }
-            borderRadius = multi(box(50.px))
-            backgroundColor = multi(Color.LIGHTGRAY)
+            borderStyle = multi(BorderStrokeStyle.DASHED)
+            borderRadius = multi(box(4.px))
+            borderColor = multi(box(Color.BLACK))
+            backgroundColor = multi(Color.color(1.0, 1.0, 1.0, 0.8))
             padding = box(5.0.px, 200.px)
             fontSize = 40.px
             fontWeight = FontWeight.BOLD
+            prefWidth = 80.pc
+        }
+        dataView {
+            fill = Color.RED
+        }
+        dataHeading {
+            fontSize = 50.px
+            fontWeight = FontWeight.BOLD
         }
         switchButton {
-            prefWidth = 50.px
-            prefHeight = 50.px
+            and (hover) {
+                textFill = Color.DARKGREY
+            }
             backgroundColor = multi(Color.TRANSPARENT)
-            padding = box(5.0.px, 200.px)
             fontSize = 20.px
-            fontWeight = FontWeight.BOLD
         }
     }
 }
