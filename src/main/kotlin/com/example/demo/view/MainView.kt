@@ -8,10 +8,16 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.effect.BoxBlur
+import javafx.scene.effect.ColorAdjust
+import javafx.scene.effect.DropShadow
+import javafx.scene.effect.Effect
+import javafx.scene.effect.GaussianBlur
 import javafx.scene.effect.Shadow
+import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
 import tornadofx.*
 import javax.xml.crypto.Data
 
@@ -23,6 +29,14 @@ class MainView : View("Workouttimer") {
     var inDataview = true
     private lateinit var mainElement: VBox
     private lateinit var dataElement: Node
+    private lateinit var blurRect: Node
+
+    private val backgroundEffect: Effect
+        get() {
+            val blur = GaussianBlur()
+            blur.input = DropShadow()
+            return blur
+        }
 
     var time = 0
         set(value)
@@ -40,6 +54,8 @@ class MainView : View("Workouttimer") {
             paddingAll = 5.0
 
             addEventFilter(KeyEvent.KEY_PRESSED) {
+                if (it.code == KeyCode.ESCAPE)
+                    hideLoadingScreen()
                 if (it.text != " ")
                     return@addEventFilter
                 myApp.paused = !myApp.paused
@@ -100,11 +116,18 @@ class MainView : View("Workouttimer") {
                     addClass(Styles.controlButton)
                 }
             }
-            effect = Shadow()
+            effect = backgroundEffect
+        }
+        blurRect = rectangle {
+            width = 10000.0
+            height = 10000.0
+            fill = Color.color(0.0, 0.0, 0.0, 0.8)
         }
         dataElement = vbox {
             addClass(Styles.dataView)
-            alignment = Pos.TOP_CENTER
+            alignment = Pos.CENTER
+
+            spacer()
 
             label ("Chose your Workout") {
                 addClass(Styles.dataHeading)
@@ -118,6 +141,9 @@ class MainView : View("Workouttimer") {
                 if (workouts.isEmpty())
                 {
                     label("No saved workouts")
+                    {
+                        textFill = Color.WHITE
+                    }
                 }
                 button("Load default") {
                     addClass(Styles.selectionButton)
@@ -131,9 +157,9 @@ class MainView : View("Workouttimer") {
                 {
                     vgrow = Priority.ALWAYS
                     alignment = Pos.CENTER
-                    separator {
+                    /*separator {
                         paddingAll = 10
-                    }
+                    }*/
                     for (workout in workouts)
                     {
                         button (workout) {
@@ -156,8 +182,9 @@ class MainView : View("Workouttimer") {
 
     private fun showLoadingScreen()
     {
-        mainElement.effect = Shadow()
+        mainElement.effect = backgroundEffect
         dataElement.show()
+        blurRect.show()
         inDataview = true
     }
 
@@ -165,6 +192,7 @@ class MainView : View("Workouttimer") {
     {
         mainElement.effect = null
         dataElement.hide()
+        blurRect.hide()
         inDataview = false
     }
 

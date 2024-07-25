@@ -50,16 +50,16 @@ class Styles : Stylesheet() {
         }
         selectionButton {
             and(hover) {
-                backgroundColor = multi(Color.LIGHTGRAY)
+                backgroundColor = multi(Color.DARKGREY)
             }
             borderStyle = multi(BorderStrokeStyle.DASHED)
             borderRadius = multi(box(4.px))
             borderColor = multi(box(Color.BLACK))
             backgroundColor = multi(Color.color(1.0, 1.0, 1.0, 0.8))
-            padding = box(5.0.px, 200.px)
+            padding = box(5.0.px)
             fontSize = 40.px
             fontWeight = FontWeight.BOLD
-            prefWidth = 80.pc
+            prefWidth = 20.pc
         }
         dataView {
             fill = Color.RED
@@ -67,6 +67,7 @@ class Styles : Stylesheet() {
         dataHeading {
             fontSize = 50.px
             fontWeight = FontWeight.BOLD
+            textFill = Color.WHITE
         }
         switchButton {
             and (hover) {
