@@ -54,12 +54,22 @@ class MainView : View("Workouttimer") {
             paddingAll = 5.0
 
             addEventFilter(KeyEvent.KEY_PRESSED) {
+
                 if (it.code == KeyCode.ESCAPE)
+                {
                     hideLoadingScreen()
+                    it.consume()
+                }
                 if (it.code == KeyCode.S)
+                {
                     showLoadingScreen()
+                    it.consume()
+                }
                 if (it.code == KeyCode.SPACE)
+                {
                     myApp.paused = !myApp.paused
+                    it.consume()
+                }
             }
 
             stackpane {
@@ -173,9 +183,6 @@ class MainView : View("Workouttimer") {
                 {
                     vgrow = Priority.ALWAYS
                     alignment = Pos.CENTER
-                    /*separator {
-                        paddingAll = 10
-                    }*/
                     for (workout in workouts)
                     {
                         button (workout) {

@@ -51,6 +51,7 @@ class MyApp: App(MainView::class, Styles::class)
 
     fun step()
     {
+        println(paused)
         time --
         view.time = time
 
@@ -67,6 +68,7 @@ class MyApp: App(MainView::class, Styles::class)
     {
         paused = true
         currentExercise = DataLoader.getWorkout(workout)
+        exerciseStart = currentExercise
         resetState()
     }
 
@@ -74,6 +76,7 @@ class MyApp: App(MainView::class, Styles::class)
     {
         paused = true
         currentExercise = DataLoader.getDefaultExercise()
+        exerciseStart = currentExercise
         resetState()
     }
 
@@ -82,9 +85,9 @@ class MyApp: App(MainView::class, Styles::class)
         if (currentExercise?.next == null)
             return
         currentExercise = currentExercise!!.next?.reduceToElement()
-        exerciseCounter++
         if (currentExercise == null)
             return
+        exerciseCounter++
         time = currentExercise!!.duration
         resetState()
         paused = true
@@ -102,21 +105,15 @@ class MyApp: App(MainView::class, Styles::class)
         goto(exerciseCounter-1)
     }
 
-    fun goto(index: Int)
+    private fun goto(index: Int)
     {
-        if (index == 0)
-        {
-            resetState()
-            paused = true
-            return
-        }
-
         var iteratorExercise = exerciseStart
-        for (i in 0 until index)
+        for (i in 0 .. index)
         {
             if (iteratorExercise == null)
                 return
-            iteratorExercise = iteratorExercise.next?.reduceToElement()
+            if (i != 0)
+                iteratorExercise = iteratorExercise.next?.reduceToElement()
         }
         currentExercise = iteratorExercise
         exerciseCounter = index
