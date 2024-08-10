@@ -2,8 +2,11 @@ package com.example.demo.app.exercisemodel
 
 abstract class ScheduleElement {
 
+    var next: ScheduleElement? = null
+
+    abstract val duration: Int
     abstract fun reduceToElement(): Exercise?
 
-    var next: ScheduleElement? = null
+    fun getTotalDuration(): Int = duration + (next?.getTotalDuration() ?: 0)
 
 }

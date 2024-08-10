@@ -2,7 +2,7 @@ package com.example.demo.app.exercisemodel
 
 class Exercise (
     val name: String,
-    val duration: Int
+    override val duration: Int
 ): ScheduleElement() {
     override fun reduceToElement(): Exercise {
         return this

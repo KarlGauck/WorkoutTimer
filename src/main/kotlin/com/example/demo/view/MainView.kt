@@ -185,7 +185,9 @@ class MainView : View("Workouttimer") {
                     alignment = Pos.CENTER
                     for (workout in workouts)
                     {
-                        button (workout) {
+                        val data = DataLoader.getWorkout(workout)
+                        val dur = data.getTotalDuration()
+                        button ("$workout (${dur/60}:${dur%60})") {
                             addClass(Styles.selectionButton)
                             hgrow = Priority.ALWAYS
                             paddingAll = 50

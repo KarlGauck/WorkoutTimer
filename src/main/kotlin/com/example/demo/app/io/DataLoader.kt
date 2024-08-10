@@ -4,8 +4,10 @@ import com.example.demo.app.exercisemodel.Exercise
 import com.example.demo.app.exercisemodel.ExerciseSet
 import com.example.demo.app.exercisemodel.ScheduleElement
 import com.example.demo.m
-import com.google.gson.*
-import tornadofx.getProperty
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import java.io.File
 import java.lang.reflect.Type
 

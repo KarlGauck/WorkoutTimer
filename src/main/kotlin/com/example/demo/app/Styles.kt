@@ -59,7 +59,7 @@ class Styles : Stylesheet() {
             padding = box(5.0.px)
             fontSize = 40.px
             fontWeight = FontWeight.BOLD
-            prefWidth = 20.pc
+            prefWidth = 40.pc
         }
         dataView {
             fill = Color.RED

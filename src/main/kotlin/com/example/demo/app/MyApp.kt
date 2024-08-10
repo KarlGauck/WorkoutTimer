@@ -3,6 +3,7 @@ package com.example.demo.app
 import com.example.demo.app.exercisemodel.Exercise
 import com.example.demo.app.io.DataLoader
 import com.example.demo.app.sound.SoundHandler
+import com.example.demo.view.EditorView
 import com.example.demo.view.MainView
 import javafx.animation.AnimationTimer
 import tornadofx.App
