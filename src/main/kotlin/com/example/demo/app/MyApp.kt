@@ -89,6 +89,12 @@ class MyApp: App(MainView::class, Styles::class)
         if (currentExercise == null)
             return
         exerciseCounter++
+        if (currentExercise!!.imageSource == null)
+            view.hideImageView()
+        else {
+            view.imageSource.value = "file:data/${currentExercise!!.imageSource}"
+            view.showImageView()
+        }
         time = currentExercise!!.duration
         resetState()
         paused = true
@@ -117,6 +123,12 @@ class MyApp: App(MainView::class, Styles::class)
                 iteratorExercise = iteratorExercise.next?.reduceToElement()
         }
         currentExercise = iteratorExercise
+        if (currentExercise!!.imageSource == null)
+            view.hideImageView()
+        else {
+            view.imageSource.value = "file:data/${currentExercise!!.imageSource}"
+            view.showImageView()
+        }
         exerciseCounter = index
         resetState()
         paused = true

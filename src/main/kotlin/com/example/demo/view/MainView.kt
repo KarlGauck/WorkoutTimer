@@ -13,6 +13,7 @@ import javafx.scene.effect.DropShadow
 import javafx.scene.effect.Effect
 import javafx.scene.effect.GaussianBlur
 import javafx.scene.effect.Shadow
+import javafx.scene.image.Image
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.Priority
@@ -26,10 +27,12 @@ class MainView : View("Workouttimer") {
     private val timeMinutes = SimpleIntegerProperty(0)
     private val timeSeconds = SimpleIntegerProperty(0)
     val exerciseDisplay = SimpleStringProperty("something goes here")
+    val imageSource = SimpleStringProperty(null)
     private var inDataview = true
     private lateinit var mainElement: VBox
     private lateinit var dataElement: Node
     private lateinit var blurRect: Node
+    private lateinit var imageView: Node
 
     private val backgroundEffect: Effect
         get() {
@@ -87,6 +90,9 @@ class MainView : View("Workouttimer") {
                         isFocusTraversable = false
                     }
                 }
+            }
+            imageView = imageview(imageSource) {
+                hide()
             }
             label(exerciseDisplay) {
                 addClass(Styles.heading)
@@ -203,6 +209,16 @@ class MainView : View("Workouttimer") {
                 spacer()
             }
         }
+    }
+
+    fun showImageView()
+    {
+        imageView.show()
+    }
+
+    fun hideImageView()
+    {
+        imageView.hide()
     }
 
     private fun showLoadingScreen()

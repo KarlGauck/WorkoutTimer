@@ -2,11 +2,14 @@ package com.example.demo.app.exercisemodel
 
 class Exercise (
     val name: String,
-    override val duration: Int
+    override val duration: Int,
+    val imageSource: String?
 ): ScheduleElement() {
     override fun reduceToElement(): Exercise {
         return this
     }
+
+    constructor(name: String, duration: Int): this(name, duration, null)
 
     companion object {
 

@@ -15,7 +15,7 @@ object DataLoader {
 
     fun getDefaultExercise() = Exercise.exerciseFromList(arrayOf(
         Exercise("Warmup", 5.m),
-        Exercise("Handstand", 5.m),
+        Exercise("Handstand", 5.m, "image.png"),
         ExerciseSet(2, arrayOf(
             Exercise("Handstandliegestützen", 1.m),
             Exercise("Klimmzüge", 1.m),
