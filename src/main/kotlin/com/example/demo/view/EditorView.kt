@@ -9,7 +9,7 @@ import tornadofx.*
 
 class EditorView: View("Workouttimer") {
 
-    val top = Exercise.exerciseFromList(arrayOf(
+    val top = ScheduleElement.elementFromList(arrayOf(
         Exercise("top", 3),
         Exercise("lel", 3),
         ExerciseSet(

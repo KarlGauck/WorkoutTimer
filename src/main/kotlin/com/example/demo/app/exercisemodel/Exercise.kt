@@ -2,30 +2,21 @@ package com.example.demo.app.exercisemodel
 
 class Exercise (
     val name: String,
+    val description: String?,
     override val duration: Int,
     val imageSource: String?
 ): ScheduleElement() {
-    override fun reduceToElement(): Exercise {
+    override fun reduceToExercise(): Exercise {
         return this
     }
 
-    constructor(name: String, duration: Int): this(name, duration, null)
+    constructor(name: String, duration: Int): this(name, null, duration, null)
+    constructor(name: String, description: String?, duration: Int): this(name, description, duration, null)
+    constructor(name: String, duration: Int, imageSource: String?): this(name, null, duration, imageSource)
 
     companion object {
 
-        fun exerciseFromList(elements: Array<ScheduleElement>): Exercise?
-        {
-            if (elements.isEmpty())
-                return null
-            val final = elements[0].reduceToElement()!!
-            var last: ScheduleElement = final
-            for (element in elements.slice(1 until elements.size))
-            {
-                last.next = element
-                last = element
-            }
-            return final
-        }
+
 
         fun printExercise(exercise: Exercise)
         {

@@ -27,12 +27,14 @@ class MainView : View("Workouttimer") {
     private val timeMinutes = SimpleIntegerProperty(0)
     private val timeSeconds = SimpleIntegerProperty(0)
     val exerciseDisplay = SimpleStringProperty("something goes here")
+    val descriptionString = SimpleStringProperty("")
     val imageSource = SimpleStringProperty(null)
     private var inDataview = true
     private lateinit var mainElement: VBox
     private lateinit var dataElement: Node
     private lateinit var blurRect: Node
     private lateinit var imageView: Node
+    private lateinit var descriptionLabel: Node
 
     private val backgroundEffect: Effect
         get() {
@@ -94,10 +96,17 @@ class MainView : View("Workouttimer") {
             imageView = imageview(imageSource) {
                 hide()
             }
-            label(exerciseDisplay) {
-                addClass(Styles.heading)
+            vbox {
                 vgrow = Priority.ALWAYS
                 useMaxHeight = true
+                alignment = Pos.CENTER
+                label(exerciseDisplay) {
+                    addClass(Styles.heading)
+                }
+                descriptionLabel = label(descriptionString) {
+                    addClass(Styles.description)
+                    hide()
+                }
             }
             label {
                 fun changeText() {
@@ -219,6 +228,16 @@ class MainView : View("Workouttimer") {
     fun hideImageView()
     {
         imageView.hide()
+    }
+
+    fun showDescriptionLabel()
+    {
+        descriptionLabel.show()
+    }
+
+    fun hideDescriptionLabel()
+    {
+        descriptionLabel.hide()
     }
 
     private fun showLoadingScreen()

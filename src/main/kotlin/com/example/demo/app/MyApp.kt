@@ -1,9 +1,9 @@
 package com.example.demo.app
 
 import com.example.demo.app.exercisemodel.Exercise
+import com.example.demo.app.exercisemodel.ScheduleElement
 import com.example.demo.app.io.DataLoader
 import com.example.demo.app.sound.SoundHandler
-import com.example.demo.view.EditorView
 import com.example.demo.view.MainView
 import javafx.animation.AnimationTimer
 import tornadofx.App
@@ -13,8 +13,8 @@ class MyApp: App(MainView::class, Styles::class)
     private val view: MainView by inject()
     private var initialized = false
 
-    private var currentExercise: Exercise? = DataLoader.getDefaultExercise()
-    private var exerciseStart: Exercise? = DataLoader.getDefaultExercise()
+    private var currentExercise: Exercise? = DataLoader.getDefaultExercise()?.reduceToExercise()
+    private var exerciseStart: ScheduleElement? = DataLoader.getDefaultExercise()
     private var exerciseCounter = 0
 
     private var time = currentExercise?.duration ?: 0
@@ -44,6 +44,18 @@ class MyApp: App(MainView::class, Styles::class)
 
     fun initialize()
     {
+        val list = listOf(
+            "# Name",
+            "description: blabla",
+            "duration: 10",
+            "## repeat 3 {",
+            "# Name 2",
+            "duration: 3",
+            "}"
+        )
+
+        DataLoader.parseWorkout(list).forEach(::println)
+
         if (initialized)
             return
         initialized = true
@@ -68,7 +80,8 @@ class MyApp: App(MainView::class, Styles::class)
     fun loadWorkout(workout: String)
     {
         paused = true
-        currentExercise = DataLoader.getWorkout(workout)
+        currentExercise = DataLoader.getWorkout(workout).reduceToExercise()
+        setOptionalProperties()
         exerciseStart = currentExercise
         resetState()
     }
@@ -76,7 +89,8 @@ class MyApp: App(MainView::class, Styles::class)
     fun loadDefaultWorkout()
     {
         paused = true
-        currentExercise = DataLoader.getDefaultExercise()
+        currentExercise = DataLoader.getDefaultExercise()?.reduceToExercise()
+        setOptionalProperties()
         exerciseStart = currentExercise
         resetState()
     }
@@ -85,16 +99,13 @@ class MyApp: App(MainView::class, Styles::class)
     {
         if (currentExercise?.next == null)
             return
-        currentExercise = currentExercise!!.next?.reduceToElement()
+        currentExercise = currentExercise!!.next?.reduceToExercise()
         if (currentExercise == null)
             return
         exerciseCounter++
-        if (currentExercise!!.imageSource == null)
-            view.hideImageView()
-        else {
-            view.imageSource.value = "file:data/${currentExercise!!.imageSource}"
-            view.showImageView()
-        }
+
+        setOptionalProperties()
+
         time = currentExercise!!.duration
         resetState()
         paused = true
@@ -102,7 +113,7 @@ class MyApp: App(MainView::class, Styles::class)
 
     fun backToStart()
     {
-        currentExercise = exerciseStart
+        currentExercise = exerciseStart?.reduceToExercise()
         resetState()
         paused = true
     }
@@ -120,15 +131,12 @@ class MyApp: App(MainView::class, Styles::class)
             if (iteratorExercise == null)
                 return
             if (i != 0)
-                iteratorExercise = iteratorExercise.next?.reduceToElement()
+                iteratorExercise = iteratorExercise.next?.reduceToExercise()
         }
-        currentExercise = iteratorExercise
-        if (currentExercise!!.imageSource == null)
-            view.hideImageView()
-        else {
-            view.imageSource.value = "file:data/${currentExercise!!.imageSource}"
-            view.showImageView()
-        }
+        currentExercise = iteratorExercise?.reduceToExercise()
+
+        setOptionalProperties()
+
         exerciseCounter = index
         resetState()
         paused = true
@@ -139,6 +147,23 @@ class MyApp: App(MainView::class, Styles::class)
         time = currentExercise?.duration ?: 0
         view.time = time
         view.exerciseDisplay.value = currentExercise!!.name
+    }
+
+    private fun setOptionalProperties()
+    {
+        if (currentExercise!!.imageSource == null)
+            view.hideImageView()
+        else {
+            view.imageSource.value = "file:${DataLoader.dataPath}${currentExercise!!.imageSource}"
+            view.showImageView()
+        }
+
+        if (currentExercise!!.description == null)
+            view.hideDescriptionLabel()
+        else {
+            view.descriptionString.value = currentExercise!!.description
+            view.showDescriptionLabel()
+        }
     }
 
 }

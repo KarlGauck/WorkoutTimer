@@ -18,12 +18,18 @@ class Styles : Stylesheet() {
         val switchButton by cssclass()
         val dataView by cssclass()
         val dataHeading by cssclass()
+        val description by cssclass()
     }
 
     init {
         heading {
             padding = box(10.px)
             fontSize = 80.px
+            fontWeight = FontWeight.BOLD
+        }
+        description {
+            padding = box(10.px)
+            fontSize = 20.px
             fontWeight = FontWeight.BOLD
         }
         timeDisplay {

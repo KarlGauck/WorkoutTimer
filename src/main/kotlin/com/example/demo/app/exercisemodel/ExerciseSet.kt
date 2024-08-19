@@ -7,7 +7,7 @@ class ExerciseSet(val repetitions: Int, val elements: Array<ScheduleElement>): S
             value + it.getTotalDuration()
         } * repetitions
 
-    override fun reduceToElement(): Exercise? {
+    override fun reduceToExercise(): Exercise? {
         val list = elements.toMutableList()
         val lastElement = ExerciseSet(repetitions-1, elements)
         lastElement.next = this.next
@@ -17,8 +17,8 @@ class ExerciseSet(val repetitions: Int, val elements: Array<ScheduleElement>): S
         else
             list.last().next = this.next
 
-        val result = Exercise.exerciseFromList(list.toTypedArray())
-        return result
+        val result = ScheduleElement.elementFromList(list.toTypedArray())
+        return if (result is Exercise) result else result?.reduceToExercise()
     }
 
 }
