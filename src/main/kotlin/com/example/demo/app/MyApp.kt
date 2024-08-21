@@ -18,6 +18,11 @@ class MyApp: App(MainView::class, Styles::class)
     private var exerciseCounter = 0
 
     private var time = currentExercise?.duration ?: 0
+        set(value)
+        {
+            field = value
+            view.time = time
+        }
 
     var paused: Boolean = true
         set(value)
@@ -64,16 +69,16 @@ class MyApp: App(MainView::class, Styles::class)
 
     fun step()
     {
-        println(paused)
-        time --
-        view.time = time
-
         if (time > 0)
+        {
+            time --
+            if (time == 0)
+                SoundHandler.play()
             return
+        }
         if (currentExercise == null)
             return
 
-        SoundHandler.play()
         next()
     }
 
