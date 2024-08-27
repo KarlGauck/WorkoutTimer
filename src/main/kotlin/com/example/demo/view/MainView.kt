@@ -220,6 +220,13 @@ class MainView : View("Workouttimer") {
         }
     }
 
+    fun congratulation()
+    {
+        exerciseDisplay.value = "\uD83C\uDF86 Congratulation \uD83C\uDF86"
+        descriptionString.value = "youre finished"
+        showDescriptionLabel()
+    }
+
     fun showImageView()
     {
         imageView.show()

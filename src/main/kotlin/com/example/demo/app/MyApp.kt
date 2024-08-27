@@ -73,7 +73,11 @@ class MyApp: App(MainView::class, Styles::class)
         {
             time --
             if (time == 0)
+            {
                 SoundHandler.play()
+                if (currentExercise!!.next == null)
+                    view.congratulation()
+            }
             return
         }
         if (currentExercise == null)
